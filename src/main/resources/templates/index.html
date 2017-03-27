@@ -71,12 +71,8 @@
 
     <div class="row">
         <div class="col-lg-12 text-center">
-            <h1>A Bootstrap Starter Template</h1>
-            <p class="lead">Complete with pre-defined file paths that you won't have to change!!</p>
-            <ul class="list-unstyled">
-                <li>Bootstrap v3.3.7</li>
-                <li>jQuery v1.11.1</li>
-            </ul>
+            <h1>Virginia Tech Shooting 2007</h1>
+            <div id="word-cloud-canvas"></div>
         </div>
     </div>
     <!-- /.row -->
@@ -95,6 +91,83 @@
 
 <!-- D3 word cloud -->
 <script th:src="@{/js/d3.layout.cloud.js}"></script>
+
+<script>
+    $(document).ready(function () {
+        var fill = d3.scale.category20();
+        var svg = d3.select("#word-cloud-canvas").append("svg")
+            .attr("width", 1000)
+            .attr("height", 500)
+            .append("g")
+            .attr("transform", "translate(500,250)");
+
+        loadWordFrequencies(function (results) {
+            var layout = d3.layout.cloud()
+                .size([1000, 500])
+                .words(results.map(function(r) {
+                    return { text: r.word, size: r.size };
+                }))
+                .padding(5)
+                .rotate(function() { return ~~(Math.random() * 2) * 90; })
+                .font("Impact")
+                .fontSize(function(d) { return d.size; })
+                .on("end", draw);
+
+            layout.start();
+        });
+
+        function loadWordFrequencies(onSuccess) {
+            $.ajax({
+                url: "/word-frequencies",
+                type: "GET",
+                cache: false,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+                    /*<![CDATA[*/
+                    if (onSuccess && $.isFunction(onSuccess))
+                        onSuccess(data);
+                    /*]]>*/
+                },
+                error: function (jqXHR, status, error) {
+                    console.log("Error In submitting request! : " + error);
+                }
+            });
+        }
+
+        function draw(words) {
+            var cloud = svg.selectAll("g text")
+                .data(words, function(d) { return d.text; });
+
+            //Entering words
+            cloud.enter()
+                .append("text")
+                .style("font-family", "Impact")
+                .style("fill", function(d, i) { return fill(i); })
+                .attr("text-anchor", "middle")
+                .attr('font-size', 1)
+                .text(function(d) { return d.text; });
+
+            //Entering and existing words
+            cloud
+                .transition()
+                .duration(600)
+                .style("font-size", function(d) { return d.size + "px"; })
+                .attr("transform", function(d) {
+                    return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
+                })
+                .style("fill-opacity", 1);
+
+            //Exiting words
+            cloud.exit()
+                .transition()
+                .duration(200)
+                .style('fill-opacity', 1e-6)
+                .attr('font-size', 1)
+                .remove();
+        }
+    });
+</script>
 
 </body>
 

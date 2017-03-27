@@ -13,12 +13,12 @@ import java.util.List;
  * Created on: 27.3.2017.
  */
 @Repository("hbase-dao")
-public class HBaseDAO implements GlobalEventsDAO {
+public class HBaseDAOImpl implements GlobalEventsDAO {
 
     private HbaseTemplate template;
 
     @Autowired
-    public HBaseDAO(HbaseTemplate template) {
+    public HBaseDAOImpl(HbaseTemplate template) {
         this.template = template;
     }
 

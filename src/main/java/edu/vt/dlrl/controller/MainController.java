@@ -3,6 +3,7 @@ package edu.vt.dlrl.controller;
 import edu.vt.dlrl.dao.GlobalEventsDAO;
 import edu.vt.dlrl.domain.WordFrequency;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +23,7 @@ public class MainController {
     private final GlobalEventsDAO dao;
 
     @Autowired
-    public MainController(GlobalEventsDAO dao) {
+    public MainController(@Qualifier("in-memory-dao") GlobalEventsDAO dao) {
         this.dao = dao;
     }
 
