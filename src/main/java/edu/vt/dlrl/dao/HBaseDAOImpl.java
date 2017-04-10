@@ -1,6 +1,6 @@
 package edu.vt.dlrl.dao;
 
-import edu.vt.dlrl.domain.WordFrequency;
+import edu.vt.dlrl.domain.TermFrequency;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.hadoop.hbase.HbaseTemplate;
 import org.springframework.stereotype.Repository;
@@ -23,7 +23,7 @@ public class HBaseDAOImpl implements GlobalEventsDAO {
     }
 
     @Override
-    public List<WordFrequency> getWordFrequencies() {
+    public List<TermFrequency> getWordFrequencies() {
         return Collections.emptyList();
     }
 }

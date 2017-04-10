@@ -1,6 +1,6 @@
 package edu.vt.dlrl.dao;
 
-import edu.vt.dlrl.domain.WordFrequency;
+import edu.vt.dlrl.domain.TermFrequency;
 
 import java.util.List;
 
@@ -9,5 +9,5 @@ import java.util.List;
  * Created on: 27.3.2017.
  */
 public interface GlobalEventsDAO {
-    List<WordFrequency> getWordFrequencies();
+    List<TermFrequency> getWordFrequencies();
 }

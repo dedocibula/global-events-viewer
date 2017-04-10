@@ -1,6 +1,6 @@
 package edu.vt.dlrl.dao;
 
-import edu.vt.dlrl.domain.WordFrequency;
+import edu.vt.dlrl.domain.TermFrequency;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -20,10 +20,10 @@ public class InMemoryDAOImpl implements GlobalEventsDAO {
     }
 
     @Override
-    public List<WordFrequency> getWordFrequencies() {
-        List<WordFrequency> wordFrequencies = new ArrayList<>();
+    public List<TermFrequency> getWordFrequencies() {
+        List<TermFrequency> wordFrequencies = new ArrayList<>();
         for (int i = 0; i < 30; i++) {
-            wordFrequencies.add(new WordFrequency(words[(int)(Math.random() * words.length)],
+            wordFrequencies.add(new TermFrequency(words[(int)(Math.random() * words.length)],
                     10 + (int)(Math.random() * 60)));
         }
         return wordFrequencies;

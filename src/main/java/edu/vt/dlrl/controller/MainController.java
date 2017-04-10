@@ -1,7 +1,7 @@
 package edu.vt.dlrl.controller;
 
 import edu.vt.dlrl.dao.GlobalEventsDAO;
-import edu.vt.dlrl.domain.WordFrequency;
+import edu.vt.dlrl.domain.TermFrequency;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -32,8 +32,8 @@ public class MainController {
         return "index";
     }
 
-    @RequestMapping(value = "/word-frequencies", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<WordFrequency>> wordFrequencies() {
+    @RequestMapping(value = "/term-frequencies", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<TermFrequency>> wordFrequencies() {
         return new ResponseEntity<>(dao.getWordFrequencies(), HttpStatus.OK);
     }
 }

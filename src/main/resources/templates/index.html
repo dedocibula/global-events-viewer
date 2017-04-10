@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorator="layout">
 <head>
-    <title>Word Cloud</title>
+    <title>Term Cloud</title>
 
     <!-- D3 word cloud -->
     <script th:src="@{/js/d3.layout.cloud.js}"></script>
@@ -13,24 +13,23 @@
     <div class="row">
         <div class="col-lg-12 text-center">
             <h1>Virginia Tech Shooting 2007</h1>
-            <div id="word-cloud-canvas"></div>
+            <div id="term-cloud-canvas"></div>
         </div>
     </div>
-    <!-- /.row -->
     <script>
         $(document).ready(function () {
             var fill = d3.scale.category20();
-            var svg = d3.select("#word-cloud-canvas").append("svg")
+            var svg = d3.select("#term-cloud-canvas").append("svg")
                 .attr("width", 1000)
                 .attr("height", 500)
                 .append("g")
                 .attr("transform", "translate(500,250)");
 
-            loadWordFrequencies(function (results) {
+            loadTermFrequencies(function (results) {
                 var layout = d3.layout.cloud()
                     .size([1000, 500])
                     .words(results.map(function (r) {
-                        return {text: r.word, size: r.size};
+                        return {text: r.term, size: r.size};
                     }))
                     .padding(5)
                     .rotate(function () {
@@ -45,9 +44,9 @@
                 layout.start();
             });
 
-            function loadWordFrequencies(onSuccess) {
+            function loadTermFrequencies(onSuccess) {
                 $.ajax({
-                    url: "/word-frequencies",
+                    url: "/term-frequencies",
                     type: "GET",
                     cache: false,
                     contentType: "application/json; charset=utf-8",
@@ -64,13 +63,13 @@
                 });
             }
 
-            function draw(words) {
+            function draw(terms) {
                 var cloud = svg.selectAll("g text")
-                    .data(words, function (d) {
+                    .data(terms, function (d) {
                         return d.text;
                     });
 
-                //Entering words
+                //Entering terms
                 cloud.enter()
                     .append("text")
                     .style("font-family", "Impact")
@@ -83,7 +82,7 @@
                         return d.text;
                     });
 
-                //Entering and existing words
+                //Entering and existing terms
                 cloud
                     .transition()
                     .duration(600)
@@ -95,7 +94,7 @@
                     })
                     .style("fill-opacity", 1);
 
-                //Exiting words
+                //Exiting terms
                 cloud.exit()
                     .transition()
                     .duration(200)
