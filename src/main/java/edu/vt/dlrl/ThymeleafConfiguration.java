@@ -28,7 +28,7 @@ public class ThymeleafConfiguration {
     public ITemplateResolver defaultTemplateResolver() {
         TemplateResolver resolver = new FileTemplateResolver();
         resolver.setSuffix(properties.getSuffix());
-        resolver.setPrefix("src/main/resources/templates/");
+        resolver.setPrefix(properties.getPrefix());
         resolver.setTemplateMode(properties.getMode());
         resolver.setCharacterEncoding(properties.getEncoding().name());
         resolver.setCacheable(properties.isCache());

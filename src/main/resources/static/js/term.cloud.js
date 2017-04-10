@@ -1,14 +1,17 @@
 $(document).ready(function () {
     var fill = d3.scale.category20();
-    var svg = d3.select("#term-cloud-canvas").append("svg")
-        .attr("width", 1000)
-        .attr("height", 500)
+    var $container = $("#term-cloud-canvas");
+    var width = $container.width() * 0.9;
+    var height = $container.parent().height() * 0.9;
+    var svg = d3.select($container[0]).append("svg")
+        .attr("width", width)
+        .attr("height", height)
         .append("g")
-        .attr("transform", "translate(500,250)");
+        .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
     loadTermFrequencies(function (results) {
         var layout = d3.layout.cloud()
-            .size([1000, 500])
+            .size([width, height])
             .words(results.map(function (r) {
                 return {text: r.term, size: r.size};
             }))

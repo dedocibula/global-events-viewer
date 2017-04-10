@@ -4,19 +4,30 @@
 <head>
     <title>Term Cloud</title>
 
-    <!-- D3 word cloud -->
-    <script th:src="@{/js/d3.layout.cloud.js}"></script>
+    <!-- Term cloud CSS -->
+    <link href="css/term.cloud.css" rel="stylesheet"/>
 
-    <!-- term cloud -->
-    <script th:src="@{/js/term.cloud.js}"></script>
+    <!-- D3 word cloud -->
+    <script src="js/d3.layout.cloud.js"></script>
+
+    <!-- Term cloud js -->
+    <script src="js/term.cloud.js"></script>
 </head>
 <body>
 <!-- Page Content -->
 <section layout:fragment="content">
-    <div class="row">
-        <div class="col-lg-12 text-center">
-            <h1>Virginia Tech Shooting 2007</h1>
-            <div id="term-cloud-canvas"></div>
+    <div class="container-fluid" style="height: inherit">
+        <div class="row" style="height: inherit">
+            <div id="timeline" class="col-md-2">
+                <label>Timeline</label>
+            </div>
+            <div id="term-cloud" class="col-md-8 text-center">
+                <h2>Virginia Tech Shooting 2007</h2>
+                <div id="term-cloud-canvas"></div>
+            </div>
+            <div id="filters" class="col-md-2">
+                <label>Filters</label>
+            </div>
         </div>
     </div>
 </section>
