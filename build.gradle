@@ -28,6 +28,7 @@ dependencies {
     compile('org.apache.hbase:hbase-client:1.0.0') {
         exclude group: 'org.slf4j', module: 'slf4j-log4j12'
     }
+    compile('nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:1.4.0')
 
     runtime('org.springframework.boot:spring-boot-devtools')
 

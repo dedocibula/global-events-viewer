@@ -1,74 +1,15 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout">
 <head>
+    <title>Word Cloud</title>
 
-    <meta charset="utf-8"/>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <meta name="description" content=""/>
-    <meta name="author" content=""/>
-
-    <title>Global Events Viewer</title>
-
-    <!-- Bootstrap Core CSS -->
-    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
-
-    <!-- Custom CSS -->
-    <style>
-        body {
-            padding-top: 70px;
-            /* Required padding for .navbar-fixed-top. Remove if using .navbar-static-top. Change if height of navigation changes. */
-        }
-    </style>
-
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
-
+    <!-- D3 word cloud -->
+    <script th:src="@{/js/d3.layout.cloud.js}"></script>
 </head>
-
 <body>
-
-<!-- Navigation -->
-<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-    <div class="container">
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse"
-                    data-target="#bs-example-navbar-collapse-1">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="#">Global Events</a>
-        </div>
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav">
-                <li>
-                    <a href="#">About</a>
-                </li>
-                <li>
-                    <a href="#">Services</a>
-                </li>
-                <li>
-                    <a href="#">Contact</a>
-                </li>
-            </ul>
-        </div>
-        <!-- /.navbar-collapse -->
-    </div>
-    <!-- /.container -->
-</nav>
-
 <!-- Page Content -->
-<div class="container">
-
+<section layout:fragment="content">
     <div class="row">
         <div class="col-lg-12 text-center">
             <h1>Virginia Tech Shooting 2007</h1>
@@ -76,99 +17,94 @@
         </div>
     </div>
     <!-- /.row -->
+    <script>
+        $(document).ready(function () {
+            var fill = d3.scale.category20();
+            var svg = d3.select("#word-cloud-canvas").append("svg")
+                .attr("width", 1000)
+                .attr("height", 500)
+                .append("g")
+                .attr("transform", "translate(500,250)");
 
-</div>
-<!-- /.container -->
+            loadWordFrequencies(function (results) {
+                var layout = d3.layout.cloud()
+                    .size([1000, 500])
+                    .words(results.map(function (r) {
+                        return {text: r.word, size: r.size};
+                    }))
+                    .padding(5)
+                    .rotate(function () {
+                        return ~~(Math.random() * 2) * 90;
+                    })
+                    .font("Impact")
+                    .fontSize(function (d) {
+                        return d.size;
+                    })
+                    .on("end", draw);
 
-<!-- jQuery Version 1.11.1 -->
-<script th:src="@{/js/jquery.js}"></script>
-
-<!-- Bootstrap Core JavaScript -->
-<script th:src="@{/js/bootstrap.min.js}"></script>
-
-<!-- D3 -->
-<script th:src="@{/js/d3.min.js}"></script>
-
-<!-- D3 word cloud -->
-<script th:src="@{/js/d3.layout.cloud.js}"></script>
-
-<script>
-    $(document).ready(function () {
-        var fill = d3.scale.category20();
-        var svg = d3.select("#word-cloud-canvas").append("svg")
-            .attr("width", 1000)
-            .attr("height", 500)
-            .append("g")
-            .attr("transform", "translate(500,250)");
-
-        loadWordFrequencies(function (results) {
-            var layout = d3.layout.cloud()
-                .size([1000, 500])
-                .words(results.map(function(r) {
-                    return { text: r.word, size: r.size };
-                }))
-                .padding(5)
-                .rotate(function() { return ~~(Math.random() * 2) * 90; })
-                .font("Impact")
-                .fontSize(function(d) { return d.size; })
-                .on("end", draw);
-
-            layout.start();
-        });
-
-        function loadWordFrequencies(onSuccess) {
-            $.ajax({
-                url: "/word-frequencies",
-                type: "GET",
-                cache: false,
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function (data) {
-                    /*<![CDATA[*/
-                    if (onSuccess && $.isFunction(onSuccess))
-                        onSuccess(data);
-                    /*]]>*/
-                },
-                error: function (jqXHR, status, error) {
-                    console.log("Error In submitting request! : " + error);
-                }
+                layout.start();
             });
-        }
 
-        function draw(words) {
-            var cloud = svg.selectAll("g text")
-                .data(words, function(d) { return d.text; });
+            function loadWordFrequencies(onSuccess) {
+                $.ajax({
+                    url: "/word-frequencies",
+                    type: "GET",
+                    cache: false,
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (data) {
+                        /*<![CDATA[*/
+                        if (onSuccess && $.isFunction(onSuccess))
+                            onSuccess(data);
+                        /*]]>*/
+                    },
+                    error: function (jqXHR, status, error) {
+                        console.log("Error In submitting request! : " + error);
+                    }
+                });
+            }
 
-            //Entering words
-            cloud.enter()
-                .append("text")
-                .style("font-family", "Impact")
-                .style("fill", function(d, i) { return fill(i); })
-                .attr("text-anchor", "middle")
-                .attr('font-size', 1)
-                .text(function(d) { return d.text; });
+            function draw(words) {
+                var cloud = svg.selectAll("g text")
+                    .data(words, function (d) {
+                        return d.text;
+                    });
 
-            //Entering and existing words
-            cloud
-                .transition()
-                .duration(600)
-                .style("font-size", function(d) { return d.size + "px"; })
-                .attr("transform", function(d) {
-                    return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
-                })
-                .style("fill-opacity", 1);
+                //Entering words
+                cloud.enter()
+                    .append("text")
+                    .style("font-family", "Impact")
+                    .style("fill", function (d, i) {
+                        return fill(i);
+                    })
+                    .attr("text-anchor", "middle")
+                    .attr('font-size', 1)
+                    .text(function (d) {
+                        return d.text;
+                    });
 
-            //Exiting words
-            cloud.exit()
-                .transition()
-                .duration(200)
-                .style('fill-opacity', 1e-6)
-                .attr('font-size', 1)
-                .remove();
-        }
-    });
-</script>
+                //Entering and existing words
+                cloud
+                    .transition()
+                    .duration(600)
+                    .style("font-size", function (d) {
+                        return d.size + "px";
+                    })
+                    .attr("transform", function (d) {
+                        return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
+                    })
+                    .style("fill-opacity", 1);
 
+                //Exiting words
+                cloud.exit()
+                    .transition()
+                    .duration(200)
+                    .style('fill-opacity', 1e-6)
+                    .attr('font-size', 1)
+                    .remove();
+            }
+        });
+    </script>
+</section>
 </body>
-
 </html>
