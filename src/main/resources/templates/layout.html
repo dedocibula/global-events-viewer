@@ -18,6 +18,11 @@
             padding-top: 70px;
             /* Required padding for .navbar-fixed-top. Remove if using .navbar-static-top. Change if height of navigation changes. */
         }
+
+        #description-panel {
+            background: #fff;
+            border: 1px solid #ddd;
+        }
     </style>
 
     <!-- jQuery Version 1.11.1 -->
@@ -46,23 +51,28 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="#">Global Events</a>
+        <a data-toggle="collapse" class="navbar-brand" href="#description-panel">Global Events</a>
     </div>
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav">
             <li>
-                <a href="#">About</a>
+                <a href="/">Term Cloud</a>
             </li>
             <li>
-                <a href="#">Services</a>
+                <a href="#">Localization</a>
             </li>
             <li>
-                <a href="#">Contact</a>
+                <a href="#">Global Trends</a>
             </li>
         </ul>
     </div>
-    <!-- /.navbar-collapse -->
+    <div id="description-panel" class="panel-collapse collapse">
+        <div class="panel-body">
+            GlobalEventsViewer helps in efficiently visualizing Web archive collection containing global event data over time.
+            Collection is characterized by occurrence of dominant terms (term cloud), locations (localization) and trends (global trends).
+        </div>
+    </div>
 </nav>
 
 <!-- Main Content -->
