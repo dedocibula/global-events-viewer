@@ -13,7 +13,7 @@ import java.util.List;
 @Repository("in-memory-dao")
 public class InMemoryDAOImpl implements GlobalEventsDAO {
 
-    private String[] words;
+    private final String[] words;
 
     public InMemoryDAOImpl() {
         words = SAMPLE_SEED.replaceAll("[^A-Za-z0-9 ]", "").split(" ");

@@ -15,7 +15,7 @@ import java.util.List;
 @Repository("hbase-dao")
 public class HBaseDAOImpl implements GlobalEventsDAO {
 
-    private HbaseTemplate template;
+    private final HbaseTemplate template;
 
     @Autowired
     public HBaseDAOImpl(HbaseTemplate template) {
