@@ -10,6 +10,9 @@
     <!-- D3 word cloud -->
     <script src="js/d3.layout.cloud.js"></script>
 
+    <!-- Slider js -->
+    <script src="js/slider.js"></script>
+
     <!-- Term cloud js -->
     <script src="js/term.cloud.js"></script>
 </head>
@@ -17,16 +20,17 @@
 <!-- Page Content -->
 <section layout:fragment="content">
     <div class="container-fluid" style="height: inherit">
-        <div class="row" style="height: inherit">
+        <div class="row text-center" style="height: inherit">
             <div id="timeline" class="col-md-2">
-                <label>Timeline</label>
+                <label for="slider" title="Select Year">Timeline</label>
+                <div id="slider"></div>
             </div>
-            <div id="term-cloud" class="col-md-8 text-center">
+            <div id="term-cloud" class="col-md-8">
                 <h2>Virginia Tech Shooting 2007</h2>
                 <div id="term-cloud-canvas"></div>
             </div>
             <div id="filters" class="col-md-2">
-                <label>Filters</label>
+
             </div>
         </div>
     </div>
