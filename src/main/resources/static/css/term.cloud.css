@@ -4,3 +4,11 @@
     padding-left: 0;
     padding-right: 0;
 }
+
+hr {
+    margin-top: 0.5em;
+}
+
+label {
+    font-size: 18px;
+}
