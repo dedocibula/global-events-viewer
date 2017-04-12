@@ -2,6 +2,10 @@
     height: 30vw;
 }
 
+#submit {
+    margin-top: 3vw;
+}
+
 .ui-slider-wrapper {
     margin: auto;
     position: relative;

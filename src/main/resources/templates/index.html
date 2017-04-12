@@ -25,16 +25,21 @@
     <div class="container-fluid" style="height: inherit">
         <div class="row text-center" style="height: inherit">
             <div id="timeline" class="col-md-2" style="height: inherit">
-                <label for="slider" title="Select Year">Timeline</label>
+                <label for="slider" title="Select year range">Timeline</label>
                 <hr />
                 <div id="slider"></div>
+                <button id="submit" class="ui-button ui-corner-all ui-widget">
+                    <span class="glyphicon glyphicon-search"></span> Submit
+                </button>
             </div>
             <div id="term-cloud" class="col-md-8">
                 <h2>Popular Terms</h2>
                 <div id="term-cloud-canvas"></div>
             </div>
             <div id="filters" class="col-md-2">
-
+                <label for="events" title="Select specific events">Filters</label>
+                <hr />
+                <div id="events"></div>
             </div>
         </div>
     </div>
