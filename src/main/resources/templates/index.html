@@ -5,7 +5,7 @@
     <title>Term Cloud</title>
 
     <!-- Slider CSS -->
-    <link href="css/slider.css" rel="stylesheet"/>
+    <link href="css/filters.css" rel="stylesheet"/>
 
     <!-- Term cloud CSS -->
     <link href="css/term.cloud.css" rel="stylesheet"/>
@@ -13,11 +13,11 @@
     <!-- D3 word cloud -->
     <script src="js/d3.layout.cloud.js"></script>
 
-    <!-- Slider js -->
-    <script src="js/slider.js"></script>
-
     <!-- Term cloud js -->
     <script src="js/term.cloud.js"></script>
+
+    <!-- Slider js -->
+    <script src="js/filters.js"></script>
 </head>
 <body>
 <!-- Page Content -->
@@ -26,10 +26,10 @@
         <div class="row text-center" style="height: inherit">
             <div id="timeline" class="col-md-2" style="height: inherit">
                 <label for="slider" title="Select year range">Timeline</label>
-                <hr />
+                <hr/>
                 <div id="slider"></div>
-                <button id="submit" class="ui-button ui-corner-all ui-widget">
-                    <span class="glyphicon glyphicon-search"></span> Submit
+                <button id="search-terms" class="ui-button ui-corner-all ui-widget">
+                    <span class="glyphicon glyphicon-search"></span> Search Terms
                 </button>
             </div>
             <div id="term-cloud" class="col-md-8">
@@ -37,9 +37,27 @@
                 <div id="term-cloud-canvas"></div>
             </div>
             <div id="filters" class="col-md-2">
-                <label for="events" title="Select specific events">Filters</label>
-                <hr />
-                <div id="events"></div>
+                <div>
+                    <label for="counter" title="Select term count">Term Count</label>
+                    <hr/>
+                    <input id="counter" name="count" value="50"/>
+                </div>
+                <div style="margin-top: 20px">
+                    <label for="events" title="Select specific events">Events</label>
+                    <hr/>
+                    <div id="events">
+                        <label for="color">Shadow</label>
+                        <input class="toggle brand-toggle" type="checkbox" name="color" id="color"/>
+                        <label for="border">Border</label>
+                        <input class="toggle" type="checkbox" name="border" id="border"/>
+                        <label for="background-color">Background</label>
+                        <input class="toggle brand-toggle" type="checkbox" name="background-color" id="background-color"
+                               checked="checked"/>
+                        <label for="background-image">Background Image</label>
+                        <input class="toggle brand-toggle" type="checkbox" name="background-image" id="background-image"
+                               checked="checked"/>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

@@ -6,11 +6,11 @@ package edu.vt.dlrl.domain;
  */
 public class TermFrequency {
     private String term;
-    private int size;
+    private int frequency;
 
-    public TermFrequency(String term, int size) {
+    public TermFrequency(String term, int frequency) {
         this.term = term;
-        this.size = size;
+        this.frequency = frequency;
     }
 
     public String getTerm() {
@@ -21,11 +21,11 @@ public class TermFrequency {
         this.term = term;
     }
 
-    public int getSize() {
-        return size;
+    public int getFrequency() {
+        return frequency;
     }
 
-    public void setSize(int size) {
-        this.size = size;
+    public void setFrequency(int frequency) {
+        this.frequency = frequency;
     }
 }

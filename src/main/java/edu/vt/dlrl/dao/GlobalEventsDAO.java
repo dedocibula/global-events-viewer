@@ -2,6 +2,7 @@ package edu.vt.dlrl.dao;
 
 import edu.vt.dlrl.domain.TermFrequency;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -9,5 +10,5 @@ import java.util.List;
  * Created on: 27.3.2017.
  */
 public interface GlobalEventsDAO {
-    List<TermFrequency> getWordFrequencies();
+    List<TermFrequency> getTermFrequencies(Date from, Date to, int kForEvent);
 }

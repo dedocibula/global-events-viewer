@@ -2,8 +2,24 @@
     height: 30vw;
 }
 
-#submit {
+.ui-spinner {
+    width: 150px;
+}
+
+button {
     margin-top: 3vw;
+}
+
+#events label {
+    font-size: 0.8vw;
+}
+
+hr {
+    margin-top: 0.5em;
+}
+
+label {
+    font-size: 18px;
 }
 
 .ui-slider-wrapper {

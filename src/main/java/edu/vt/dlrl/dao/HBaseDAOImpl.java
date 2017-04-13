@@ -6,6 +6,7 @@ import org.springframework.data.hadoop.hbase.HbaseTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -23,7 +24,7 @@ public class HBaseDAOImpl implements GlobalEventsDAO {
     }
 
     @Override
-    public List<TermFrequency> getWordFrequencies() {
+    public List<TermFrequency> getTermFrequencies(Date from, Date to, int kForEvent) {
         return Collections.emptyList();
     }
 }

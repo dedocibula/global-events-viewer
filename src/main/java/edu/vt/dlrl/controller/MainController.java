@@ -1,16 +1,17 @@
 package edu.vt.dlrl.controller;
 
-import edu.vt.dlrl.dao.GlobalEventsDAO;
 import edu.vt.dlrl.domain.TermFrequency;
+import edu.vt.dlrl.service.GlobalEventsService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -20,11 +21,11 @@ import java.util.List;
 @Controller
 public class MainController {
 
-    private final GlobalEventsDAO dao;
+    private final GlobalEventsService service;
 
     @Autowired
-    public MainController(@Qualifier("in-memory-dao") GlobalEventsDAO dao) {
-        this.dao = dao;
+    public MainController(GlobalEventsService service) {
+        this.service = service;
     }
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
@@ -32,8 +33,17 @@ public class MainController {
         return "index";
     }
 
-    @RequestMapping(value = "/term-frequencies", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<TermFrequency>> wordFrequencies() {
-        return new ResponseEntity<>(dao.getWordFrequencies(), HttpStatus.OK);
+    @RequestMapping(value = "/term-frequencies",
+            method = RequestMethod.POST,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<TermFrequency>> termFrequencies(
+            @RequestParam("from") int fromDate,
+            @RequestParam("to") int toDate,
+            @RequestParam("count") int topK) {
+        Calendar from = Calendar.getInstance();
+        from.set(fromDate, Calendar.JANUARY, 0);
+        Calendar to = Calendar.getInstance();
+        to.set(toDate, Calendar.JANUARY, 0);
+        return new ResponseEntity<>(service.loadTermFrequencies(from.getTime(), to.getTime(), topK), HttpStatus.OK);
     }
 }

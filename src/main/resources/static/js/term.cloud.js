@@ -9,11 +9,11 @@ $(document).ready(function () {
         .append("g")
         .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
-    loadTermFrequencies(function (results) {
+    window.redrawTermCloud = function(results) {
         var layout = d3.layout.cloud()
             .size([width, height])
             .words(results.map(function (r) {
-                return {text: r.term, size: r.size};
+                return {text: r.term, size: (Math.log(r.frequency) / Math.log(10)) * Math.log(width) };
             }))
             .padding(5)
             .rotate(function () {
@@ -26,26 +26,7 @@ $(document).ready(function () {
             .on("end", draw);
 
         layout.start();
-    });
-
-    function loadTermFrequencies(onSuccess) {
-        $.ajax({
-            url: "/term-frequencies",
-            type: "GET",
-            cache: false,
-            contentType: "application/json; charset=utf-8",
-            dataType: "json",
-            success: function (data) {
-                /*<![CDATA[*/
-                if (onSuccess && $.isFunction(onSuccess))
-                    onSuccess(data);
-                /*]]>*/
-            },
-            error: function (jqXHR, status, error) {
-                console.log("Error In submitting request! : " + error);
-            }
-        });
-    }
+    };
 
     function draw(terms) {
         var cloud = svg.selectAll("g text")
