@@ -27,4 +27,9 @@ public class HBaseDAOImpl implements GlobalEventsDAO {
     public List<TermFrequency> getTermFrequencies(Date from, Date to, int kForEvent) {
         return Collections.emptyList();
     }
+
+    @Override
+    public List<String> getEventNames(Date date) {
+        return Collections.emptyList();
+    }
 }

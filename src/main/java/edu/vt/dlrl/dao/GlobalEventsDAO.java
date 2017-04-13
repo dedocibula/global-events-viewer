@@ -11,4 +11,6 @@ import java.util.List;
  */
 public interface GlobalEventsDAO {
     List<TermFrequency> getTermFrequencies(Date from, Date to, int kForEvent);
+
+    List<String> getEventNames(Date date);
 }

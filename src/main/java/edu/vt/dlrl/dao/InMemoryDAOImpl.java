@@ -27,11 +27,20 @@ public class InMemoryDAOImpl implements GlobalEventsDAO {
             for (TermFrequency term : row.terms) {
                 if (current >= kForEvent)
                     break;
-                termFrequencies.add(term);
+                termFrequencies.add(new TermFrequency(term));
                 current++;
             }
         }
         return termFrequencies;
+    }
+
+    @Override
+    public List<String> getEventNames(Date date) {
+        List<String> eventNames = new ArrayList<>();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.add(Calendar.YEAR, 1);
+        return eventNames;
     }
 
     private static final String SAMPLE_SEED = "The Virginia Tech shooting, also known as the Virginia Tech massacre, occurred on April 16, 2007, " +

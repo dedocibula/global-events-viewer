@@ -13,6 +13,10 @@ public class TermFrequency {
         this.frequency = frequency;
     }
 
+    public TermFrequency(TermFrequency copy) {
+        this(copy.term, copy.frequency);
+    }
+
     public String getTerm() {
         return term;
     }
