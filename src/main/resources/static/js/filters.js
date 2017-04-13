@@ -25,6 +25,10 @@ $(document).ready(function () {
         direction: "vertical"
     });
 
+    $("#search-terms").on("click", function() {
+        loadTermFrequencies(redrawTermCloud);
+    });
+
     function loadTermFrequencies(onSuccess) {
         var dates = $slider.labeledslider("values");
         var count = $counter.spinner("value");
