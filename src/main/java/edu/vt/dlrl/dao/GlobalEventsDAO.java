@@ -1,5 +1,6 @@
 package edu.vt.dlrl.dao;
 
+import edu.vt.dlrl.domain.Event;
 import edu.vt.dlrl.domain.TermFrequency;
 
 import java.util.Date;
@@ -12,5 +13,5 @@ import java.util.List;
 public interface GlobalEventsDAO {
     List<TermFrequency> getTermFrequencies(Date from, Date to, int kForEvent);
 
-    List<String> getEventNames(Date date);
+    List<Event> getEvents(Date from, Date to);
 }

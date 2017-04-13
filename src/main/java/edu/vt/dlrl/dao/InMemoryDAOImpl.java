@@ -1,5 +1,6 @@
 package edu.vt.dlrl.dao;
 
+import edu.vt.dlrl.domain.Event;
 import edu.vt.dlrl.domain.TermFrequency;
 import org.springframework.stereotype.Repository;
 
@@ -35,11 +36,13 @@ public class InMemoryDAOImpl implements GlobalEventsDAO {
     }
 
     @Override
-    public List<String> getEventNames(Date date) {
-        List<String> eventNames = new ArrayList<>();
+    public List<Event> getEvents(Date from, Date to) {
+        List<Event> eventNames = new ArrayList<>();
         Calendar cal = Calendar.getInstance();
-        cal.setTime(date);
+        cal.setTime(to);
         cal.add(Calendar.YEAR, 1);
+        for (InMemoryDataRow row : IN_MEMORY_DB.subMap(from, cal.getTime()).values())
+            eventNames.add(new Event(row.id, row.eventName));
         return eventNames;
     }
 

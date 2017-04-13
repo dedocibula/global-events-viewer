@@ -1,5 +1,6 @@
 package edu.vt.dlrl.dao;
 
+import edu.vt.dlrl.domain.Event;
 import edu.vt.dlrl.domain.TermFrequency;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.hadoop.hbase.HbaseTemplate;
@@ -29,7 +30,7 @@ public class HBaseDAOImpl implements GlobalEventsDAO {
     }
 
     @Override
-    public List<String> getEventNames(Date date) {
+    public List<Event> getEvents(Date from, Date to) {
         return Collections.emptyList();
     }
 }

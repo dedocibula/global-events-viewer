@@ -21,15 +21,12 @@ $(document).ready(function () {
     });
 
     var $events = $("#events");
-    $events.controlgroup({
-        direction: "vertical"
-    });
 
-    $("#search-terms").on("click", function() {
-        loadTermFrequencies(redrawTermCloud);
-    });
+    var $termCloudTitle = $("#term-cloud").find("h2:first");
 
-    function loadTermFrequencies(onSuccess) {
+    $("#search-terms").on("click", loadTermSelection);
+
+    function loadTermSelection() {
         var dates = $slider.labeledslider("values");
         var count = $counter.spinner("value");
         var data = {
@@ -38,6 +35,15 @@ $(document).ready(function () {
             count: count
         };
 
+        post("/terms-selection", data, function (results) {
+            var text = results.from === results.to ? results.from : results.from + " - " + results.to;
+            $termCloudTitle.text("Most Popular Terms (" + text + ")");
+            generateEventSection(results.events);
+            redrawTermCloud(results.termFrequencies);
+        });
+    }
+
+    function post(url, data, onSuccess) {
         $.ajax({
             url: "/term-frequencies",
             type: "POST",
@@ -57,7 +63,17 @@ $(document).ready(function () {
         });
     }
 
-    loadTermFrequencies(redrawTermCloud);
+    function generateEventSection(events) {
+        $events.empty();
+        for (var i = events.length - 1; i >= 0; i--) {
+            var event = events[i];
+            $events.append('<label for="' + event.id + '">' + event.name + '</label>' +
+                '<input class="toggle brand-toggle" type="checkbox" name="' + event.id + '" id="' + event.id + '" checked="' + (event.selected ? "checked" : "unchecked") + '"/>');
+        }
+        $events.controlgroup({ direction: "vertical" });
+    }
+
+    loadTermSelection();
 });
 
 (function ($, undefined) {

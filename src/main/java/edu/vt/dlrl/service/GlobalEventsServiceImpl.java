@@ -1,7 +1,9 @@
 package edu.vt.dlrl.service;
 
 import edu.vt.dlrl.dao.GlobalEventsDAO;
+import edu.vt.dlrl.domain.Event;
 import edu.vt.dlrl.domain.TermFrequency;
+import edu.vt.dlrl.domain.TermSelection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -25,8 +27,19 @@ public class GlobalEventsServiceImpl implements GlobalEventsService {
     }
 
     @Override
-    public List<TermFrequency> loadTermFrequencies(Date from, Date to, int topK) {
+    public TermSelection getTermSelection(Date from, Date to, int topK, Set<String> eventIds) {
         List<TermFrequency> termFrequencies = dao.getTermFrequencies(from, to, topK);
+        NavigableSet<TermFrequency> termSet = mergeAndOrder(termFrequencies);
+        List<TermFrequency> topKTerms = getTopK(termSet, topK);
+        TermSelection selection = new TermSelection(from, to, topKTerms);
+        List<Event> events = dao.getEvents(from, to);
+        for (Event event : events)
+            event.setSelected(eventIds.isEmpty() || eventIds.contains(event.getId()));
+        selection.setEvents(events);
+        return selection;
+    }
+
+    private NavigableSet<TermFrequency> mergeAndOrder(List<TermFrequency> termFrequencies) {
         TreeSet<TermFrequency> set = new TreeSet<>(comparator);
         Map<String, TermFrequency> visited = new HashMap<>();
         for (TermFrequency termFrequency : termFrequencies) {
@@ -38,9 +51,13 @@ public class GlobalEventsServiceImpl implements GlobalEventsService {
             set.add(termFrequency);
             visited.put(termFrequency.getTerm(), termFrequency);
         }
-        termFrequencies.clear();
+        return set;
+    }
+
+    private List<TermFrequency> getTopK(NavigableSet<TermFrequency> termSet, int topK) {
+        List<TermFrequency> termFrequencies = new ArrayList<>();
         int current = 0;
-        for (TermFrequency termFrequency : set) {
+        for (TermFrequency termFrequency : termSet) {
             if (current >= topK)
                 break;
             termFrequencies.add(termFrequency);
