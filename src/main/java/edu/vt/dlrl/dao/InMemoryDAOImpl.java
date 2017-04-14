@@ -24,12 +24,9 @@ public class InMemoryDAOImpl implements GlobalEventsDAO {
     }
 
     @Override
-    public Map<String, List<TermFrequency>> getEventTermFrequencies(DateRange dateRange, int kForEvent) {
-        Map<String, List<TermFrequency>> eventTermFrequencies = new HashMap<>();
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(dateRange.getTo());
-        cal.add(Calendar.YEAR, 1);
-        for (InMemoryDataRow row : IN_MEMORY_DB.subMap(dateRange.getFrom(), cal.getTime()).values()) {
+    public LinkedHashMap<Event, List<TermFrequency>> getEventTermFrequencies(DateRange dateRange, int kForEvent) {
+        LinkedHashMap<Event, List<TermFrequency>> eventTermFrequencies = new LinkedHashMap<>();
+        for (InMemoryDataRow row : findMatchingRows(dateRange)) {
             int current = 0;
             List<TermFrequency> termFrequencies = new ArrayList<>();
             for (TermFrequency term : row.terms) {
@@ -38,20 +35,26 @@ public class InMemoryDAOImpl implements GlobalEventsDAO {
                 termFrequencies.add(new TermFrequency(term));
                 current++;
             }
-            eventTermFrequencies.put(row.id, termFrequencies);
+            eventTermFrequencies.put(new Event(row.id, row.eventName), termFrequencies);
         }
         return eventTermFrequencies;
     }
 
     @Override
-    public List<Event> getEvents(DateRange dateRange) {
-        List<Event> eventNames = new ArrayList<>();
+    public LinkedHashMap<Event, List<String>> getEventTermToURLs(String term, DateRange dateRange) {
+        LinkedHashMap<Event, List<String>> eventTermToURLs = new LinkedHashMap<>();
+        for (InMemoryDataRow row : findMatchingRows(dateRange)) {
+            if (row.mentions.containsKey(term))
+                eventTermToURLs.put(new Event(row.id, row.eventName), new ArrayList<>(row.mentions.get(term)));
+        }
+        return eventTermToURLs;
+    }
+
+    private Collection<InMemoryDataRow> findMatchingRows(DateRange dateRange) {
         Calendar cal = Calendar.getInstance();
         cal.setTime(dateRange.getTo());
         cal.add(Calendar.YEAR, 1);
-        for (InMemoryDataRow row : IN_MEMORY_DB.subMap(dateRange.getFrom(), cal.getTime()).values())
-            eventNames.add(new Event(row.id, row.eventName));
-        return eventNames;
+        return IN_MEMORY_DB.subMap(dateRange.getFrom(), cal.getTime()).values();
     }
 
     private static final String SAMPLE_SEED = "The Virginia Tech shooting, also known as the Virginia Tech massacre, occurred on April 16, 2007, " +
@@ -413,15 +416,16 @@ public class InMemoryDAOImpl implements GlobalEventsDAO {
         cal.set(2017, Calendar.APRIL, 10);
         addShooting(cal.getTime(), "San Bernardino 2017");
     }
+
     private static void addShooting(Date date, String eventName) {
         InMemoryDataRow row = new InMemoryDataRow(DATE_FORMAT.format(date), date, eventName);
         String[] words = SAMPLE_SEED.replaceAll("[^A-Za-z0-9 ]", "").split(" ");
         for (int i = 0; i < 100; i++)
-            row.terms.add(new TermFrequency(words[(int)(Math.random() * words.length)], 10 + (int)(Math.random() * 30)));
+            row.terms.add(new TermFrequency(words[(int) (Math.random() * words.length)], 10 + (int) (Math.random() * 30)));
         for (TermFrequency term : row.terms) {
             row.mentions.put(term.getTerm(), new ArrayList<String>());
             for (int i = 0; i < term.getFrequency(); i++)
-                row.mentions.get(term.getTerm()).add(SAMPLE_URLS[(int)(Math.random() * SAMPLE_URLS.length)]);
+                row.mentions.get(term.getTerm()).add(SAMPLE_URLS[(int) (Math.random() * SAMPLE_URLS.length)]);
         }
         IN_MEMORY_DB.put(date, row);
     }

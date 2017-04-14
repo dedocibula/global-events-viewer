@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Author: dedocibula
@@ -15,7 +16,7 @@ public class TermSelection {
     @JsonFormat(pattern = "yyyy")
     private Date to;
     private List<TermFrequency> termFrequencies;
-    private List<Event> events;
+    private Set<Event> events;
 
     public TermSelection(Date from, Date to, List<TermFrequency> termFrequencies) {
         this.from = from;
@@ -47,11 +48,11 @@ public class TermSelection {
         this.termFrequencies = termFrequencies;
     }
 
-    public List<Event> getEvents() {
+    public Set<Event> getEvents() {
         return events;
     }
 
-    public void setEvents(List<Event> events) {
+    public void setEvents(Set<Event> events) {
         this.events = events;
     }
 }

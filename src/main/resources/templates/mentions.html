@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout">
+<head>
+    <title>URL Mentions</title>
+
+    <!-- Mentions CSS -->
+    <link href="/css/mentions.css" rel="stylesheet"/>
+
+    <!-- Mentions js -->
+    <script src="/js/mentions.js"></script>
+</head>
+<body>
+<!-- Page Content -->
+<section layout:fragment="content">
+    <div class="container-fluid" style="height: inherit">
+        <div class="row text-center">
+            <div id="events" class="col-md-2">
+                <label for="events-container" title="Select specific events">Events</label>
+                <hr/>
+                <div id="events-container">
+                    <th:block th:each="eventToURLs, iter : ${mentions.eventsToURLs}">
+                        <label th:for="${eventToURLs.key.id}" th:text="${eventToURLs.key.name}"></label>
+                        <input type="radio" name="event" th:id="${eventToURLs.key.id}" th:checked="${iter.index == 0}"/>
+                    </th:block>
+                </div>
+            </div>
+            <div id="mentions" class="col-md-9">
+                <h2 th:text="'Term: \'' + ${mentions.term} + '\' - URL Mentions (' + ${#dates.format(mentions.from, 'yyyy')} + ' - ' + ${#dates.format(mentions.to, 'yyyy')} + ')'"></h2>
+                <div id="mentions-container">
+                    <th:block th:each="eventToURLs, iter : ${mentions.eventsToURLs}">
+                        <ul th:id="'urls-' + ${eventToURLs.key.id}" class="list-group" th:style="${iter.index == 0 ? 'display:block;' : 'display:none;'}">
+                            <th:block th:each="url : ${eventToURLs.value}">
+                                <li class="list-group-item"><a target="_blank" th:href="${url}" th:text="${url}"></a></li>
+                            </th:block>
+                        </ul>
+                    </th:block>
+                </div>
+            </div>
+            <div class="col-md-offset-1"></div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

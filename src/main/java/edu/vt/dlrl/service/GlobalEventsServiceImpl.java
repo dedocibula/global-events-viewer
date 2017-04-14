@@ -1,10 +1,7 @@
 package edu.vt.dlrl.service;
 
 import edu.vt.dlrl.dao.GlobalEventsDAO;
-import edu.vt.dlrl.domain.DateRange;
-import edu.vt.dlrl.domain.Event;
-import edu.vt.dlrl.domain.TermFrequency;
-import edu.vt.dlrl.domain.TermSelection;
+import edu.vt.dlrl.domain.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -34,25 +31,38 @@ public class GlobalEventsServiceImpl implements GlobalEventsService {
 
     @Override
     public TermSelection getTermSelection(DateRange dateRange, int topK, Set<String> eventIds) {
-        Map<String, List<TermFrequency>> eventTermFrequencies = dao.getEventTermFrequencies(dateRange, topK);
+        Map<Event, List<TermFrequency>> eventTermFrequencies = dao.getEventTermFrequencies(dateRange, topK);
         NavigableSet<TermFrequency> termSet = mergeAndOrder(eventTermFrequencies, eventIds);
         List<TermFrequency> topKTerms = getTopK(termSet, topK);
         TermSelection selection = new TermSelection(dateRange.getFrom(), dateRange.getTo(), topKTerms);
-        List<Event> events = dao.getEvents(dateRange);
+        Set<Event> events = eventTermFrequencies.keySet();
         for (Event event : events)
             event.setSelected(eventIds.isEmpty() || eventIds.contains(event.getId()));
         selection.setEvents(events);
         return selection;
     }
 
-    private NavigableSet<TermFrequency> mergeAndOrder(Map<String, List<TermFrequency>> eventTermFrequencies,
+    @Override
+    public TermMentions getTermMentions(String term, DateRange dateRange, Set<String> eventIds) {
+        Map<Event, List<String>> eventTermToURLs = dao.getEventTermToURLs(term, dateRange);
+        for (Iterator<Event> it = eventTermToURLs.keySet().iterator(); it.hasNext();) {
+            Event event = it.next();
+            if (!eventIds.isEmpty() && !eventIds.contains(event.getId()))
+                it.remove();
+        }
+        TermMentions mentions = new TermMentions(term, dateRange.getFrom(), dateRange.getTo());
+        mentions.setEventsToURLs(eventTermToURLs);
+        return mentions;
+    }
+
+    private NavigableSet<TermFrequency> mergeAndOrder(Map<Event, List<TermFrequency>> eventTermFrequencies,
                                                       Set<String> eventIds) {
         TreeSet<TermFrequency> set = new TreeSet<>(comparator);
         Map<String, TermFrequency> visited = new HashMap<>();
-        for (String eventId : eventTermFrequencies.keySet()) {
-            if (!eventIds.isEmpty() && !eventIds.contains(eventId))
+        for (Event event : eventTermFrequencies.keySet()) {
+            if (!eventIds.isEmpty() && !eventIds.contains(event.getId()))
                 continue;
-            for (TermFrequency termFrequency : eventTermFrequencies.get(eventId)) {
+            for (TermFrequency termFrequency : eventTermFrequencies.get(event)) {
                 if (visited.containsKey(termFrequency.getTerm())) {
                     TermFrequency current = visited.remove(termFrequency.getTerm());
                     set.remove(current);

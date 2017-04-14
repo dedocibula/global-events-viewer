@@ -83,7 +83,7 @@ $(document).ready(function () {
             var event = events[i];
             $events.append('<label for="' + event.id + '">' + event.name + '</label>' +
                 '<input class="toggle brand-toggle" type="checkbox" name="' + event.id + '" id="' + event.id + '" ' +
-                (event.selected ? 'checked="checked"' : "") + '"/>');
+                (event.selected ? 'checked="checked"' : "") + '/>');
         }
         $events.controlgroup({ direction: "vertical" });
     }

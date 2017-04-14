@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -36,17 +37,30 @@ public class MainController {
         return new ModelAndView("index", "maxDateRange", service.getMaxDateRange());
     }
 
+    @RequestMapping(value = "/mentions/{term}", method = RequestMethod.GET)
+    public ModelAndView mentions(@PathVariable String term,
+                           @RequestParam("from") int fromDate,
+                           @RequestParam("to") int toDate,
+                           @RequestParam(value = "eventIds[]", required = false) Set<String> eventIds) {
+        eventIds = eventIds != null ? eventIds : Collections.<String>emptySet();
+        return new ModelAndView("mentions", "mentions", service.getTermMentions(term, createDateRange(fromDate, toDate), eventIds));
+    }
+
     @RequestMapping(value = "/term-frequencies", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TermSelection> termSelection(
             @RequestParam("from") int fromDate,
             @RequestParam("to") int toDate,
             @RequestParam("count") int topK,
             @RequestParam(value = "eventIds[]", required = false) Set<String> eventIds) {
+        eventIds = eventIds != null ? eventIds : Collections.<String>emptySet();
+        return new ResponseEntity<>(service.getTermSelection(createDateRange(fromDate, toDate), topK, eventIds), HttpStatus.OK);
+    }
+
+    private DateRange createDateRange(int fromDate, int toDate) {
         Calendar from = Calendar.getInstance();
         from.set(fromDate, Calendar.JANUARY, 1);
         Calendar to = Calendar.getInstance();
         to.set(toDate, Calendar.JANUARY, 1);
-        eventIds = eventIds != null ? eventIds : Collections.<String>emptySet();
-        return new ResponseEntity<>(service.getTermSelection(new DateRange(from.getTime(), to.getTime()), topK, eventIds), HttpStatus.OK);
+        return new DateRange(from.getTime(), to.getTime());
     }
 }

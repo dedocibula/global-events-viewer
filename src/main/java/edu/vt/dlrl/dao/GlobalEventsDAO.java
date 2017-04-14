@@ -4,8 +4,8 @@ import edu.vt.dlrl.domain.DateRange;
 import edu.vt.dlrl.domain.Event;
 import edu.vt.dlrl.domain.TermFrequency;
 
+import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Author: dedocibula
@@ -14,7 +14,7 @@ import java.util.Map;
 public interface GlobalEventsDAO {
     DateRange getMaxDateRange();
 
-    Map<String, List<TermFrequency>> getEventTermFrequencies(DateRange dateRange, int kForEvent);
+    LinkedHashMap<Event, List<TermFrequency>> getEventTermFrequencies(DateRange dateRange, int kForEvent);
 
-    List<Event> getEvents(DateRange dateRange);
+    LinkedHashMap<Event, List<String>> getEventTermToURLs(String term, DateRange dateRange);
 }

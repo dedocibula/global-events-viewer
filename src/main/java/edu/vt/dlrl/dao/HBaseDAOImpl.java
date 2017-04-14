@@ -8,9 +8,8 @@ import org.springframework.data.hadoop.hbase.HbaseTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.util.Collections;
-import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Author: dedocibula
@@ -32,12 +31,12 @@ public class HBaseDAOImpl implements GlobalEventsDAO {
     }
 
     @Override
-    public Map<String, List<TermFrequency>> getEventTermFrequencies(DateRange dateRange, int kForEvent) {
-        return Collections.emptyMap();
+    public LinkedHashMap<Event, List<TermFrequency>> getEventTermFrequencies(DateRange dateRange, int kForEvent) {
+        return new LinkedHashMap<>();
     }
 
     @Override
-    public List<Event> getEvents(DateRange dateRange) {
-        return Collections.emptyList();
+    public LinkedHashMap<Event, List<String>> getEventTermToURLs(String term, DateRange dateRange) {
+        return new LinkedHashMap<>();
     }
 }

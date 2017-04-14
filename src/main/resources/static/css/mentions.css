@@ -1,0 +1,26 @@
+#mentions {
+    height: inherit;
+    border: solid 10px #101010;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+#events-container label {
+    font-size: 0.8vw;
+}
+
+label {
+    font-size: 18px;
+}
+
+#mentions-container {
+    margin-top: 50px;
+}
+
+hr {
+    margin-top: 0.5em;
+}
+
+.ui-checkboxradio-radio-label {
+    min-width: 11vw;
+}

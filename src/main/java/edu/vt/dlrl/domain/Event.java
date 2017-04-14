@@ -12,7 +12,6 @@ public class Event {
     public Event(String id, String name) {
         this.id = id;
         this.name = name;
-        this.selected = selected;
     }
 
     public String getId() {
@@ -37,5 +36,20 @@ public class Event {
 
     public void setSelected(boolean selected) {
         this.selected = selected;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Event event = (Event) o;
+
+        return id != null ? id.equals(event.id) : event.id == null;
+    }
+
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
     }
 }

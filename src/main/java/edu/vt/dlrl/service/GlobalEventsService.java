@@ -1,6 +1,7 @@
 package edu.vt.dlrl.service;
 
 import edu.vt.dlrl.domain.DateRange;
+import edu.vt.dlrl.domain.TermMentions;
 import edu.vt.dlrl.domain.TermSelection;
 
 import java.util.Date;
@@ -14,4 +15,6 @@ public interface GlobalEventsService {
     DateRange getMaxDateRange();
 
     TermSelection getTermSelection(DateRange dateRange, int topK, Set<String> eventIds);
+
+    TermMentions getTermMentions(String term, DateRange dateRange, Set<String> eventIds);
 }
