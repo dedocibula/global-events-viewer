@@ -1,9 +1,9 @@
 package edu.vt.dlrl.dao;
 
+import edu.vt.dlrl.domain.DateRange;
 import edu.vt.dlrl.domain.Event;
 import edu.vt.dlrl.domain.TermFrequency;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -11,7 +11,9 @@ import java.util.List;
  * Created on: 27.3.2017.
  */
 public interface GlobalEventsDAO {
-    List<TermFrequency> getTermFrequencies(Date from, Date to, int kForEvent);
+    DateRange getMaxDateRange();
 
-    List<Event> getEvents(Date from, Date to);
+    List<TermFrequency> getTermFrequencies(DateRange dateRange, int kForEvent);
+
+    List<Event> getEvents(DateRange dateRange);
 }

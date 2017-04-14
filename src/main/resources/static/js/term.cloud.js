@@ -71,7 +71,7 @@ $(document).ready(function () {
         cloud.transition()
             .duration(600)
             .style("font-size", function (d) {
-                return d.size + "px";
+                return scale(d.frequency) + "px";
             })
             .attr("transform", function (d) {
                 return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
@@ -84,9 +84,6 @@ $(document).ready(function () {
             .duration(200)
             .style('fill-opacity', 1e-6)
             .attr('font-size', 1)
-            .off("mouseover")
-            .off("mouseout")
-            .off("mousemove")
             .remove();
     }
 });

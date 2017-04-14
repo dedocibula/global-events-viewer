@@ -1,5 +1,6 @@
 package edu.vt.dlrl.dao;
 
+import edu.vt.dlrl.domain.DateRange;
 import edu.vt.dlrl.domain.Event;
 import edu.vt.dlrl.domain.TermFrequency;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,12 +26,17 @@ public class HBaseDAOImpl implements GlobalEventsDAO {
     }
 
     @Override
-    public List<TermFrequency> getTermFrequencies(Date from, Date to, int kForEvent) {
+    public DateRange getMaxDateRange() {
+        return null;
+    }
+
+    @Override
+    public List<TermFrequency> getTermFrequencies(DateRange dateRange, int kForEvent) {
         return Collections.emptyList();
     }
 
     @Override
-    public List<Event> getEvents(Date from, Date to) {
+    public List<Event> getEvents(DateRange dateRange) {
         return Collections.emptyList();
     }
 }

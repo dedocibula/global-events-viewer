@@ -1,30 +1,33 @@
 $(document).ready(function () {
     var $slider = $("#slider");
-    $slider.labeledslider({
-        orientation: "vertical",
-        range: true,
-        values: [2006, 2016],
-        min: 2006,
-        max: 2016,
-        step: 1,
-        slide: function (event, ui) {
-            console.log(ui.values[0]);
-            console.log(ui.values[1]);
-        }
-    });
-
     var $counter = $("#counter");
-    $counter.spinner({
-        min: 20,
-        max: 100,
-        step: 10
-    });
-
     var $events = $("#events");
-
     var $termCloudTitle = $("#term-cloud").find("h2:first");
 
-    $("#search-terms").on("click", loadTermSelection);
+    window.setupFilters = function (dateRange) {
+        $slider.labeledslider({
+            orientation: "vertical",
+            range: true,
+            values: [dateRange.from, dateRange.to],
+            min: dateRange.from,
+            max: dateRange.to,
+            step: 1,
+            slide: function (event, ui) {
+                console.log(ui.values[0]);
+                console.log(ui.values[1]);
+            }
+        });
+
+        $counter.spinner({
+            min: 20,
+            max: 100,
+            step: 10
+        });
+
+        $("#search-terms").on("click", loadTermSelection);
+
+        loadTermSelection();
+    };
 
     function loadTermSelection() {
         var dates = $slider.labeledslider("values");
@@ -72,8 +75,6 @@ $(document).ready(function () {
         }
         $events.controlgroup({ direction: "vertical" });
     }
-
-    loadTermSelection();
 });
 
 (function ($, undefined) {

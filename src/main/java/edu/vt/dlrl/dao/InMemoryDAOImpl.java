@@ -1,5 +1,6 @@
 package edu.vt.dlrl.dao;
 
+import edu.vt.dlrl.domain.DateRange;
 import edu.vt.dlrl.domain.Event;
 import edu.vt.dlrl.domain.TermFrequency;
 import org.springframework.stereotype.Repository;
@@ -18,12 +19,17 @@ public class InMemoryDAOImpl implements GlobalEventsDAO {
     private static final SortedMap<Date, InMemoryDataRow> IN_MEMORY_DB = new TreeMap<>();
 
     @Override
-    public List<TermFrequency> getTermFrequencies(Date from, Date to, int kForEvent) {
+    public DateRange getMaxDateRange() {
+        return new DateRange(IN_MEMORY_DB.firstKey(), IN_MEMORY_DB.lastKey());
+    }
+
+    @Override
+    public List<TermFrequency> getTermFrequencies(DateRange dateRange, int kForEvent) {
         List<TermFrequency> termFrequencies = new ArrayList<>();
         Calendar cal = Calendar.getInstance();
-        cal.setTime(to);
+        cal.setTime(dateRange.getTo());
         cal.add(Calendar.YEAR, 1);
-        for (InMemoryDataRow row : IN_MEMORY_DB.subMap(from, cal.getTime()).values()) {
+        for (InMemoryDataRow row : IN_MEMORY_DB.subMap(dateRange.getFrom(), cal.getTime()).values()) {
             int current = 0;
             for (TermFrequency term : row.terms) {
                 if (current >= kForEvent)
@@ -36,12 +42,12 @@ public class InMemoryDAOImpl implements GlobalEventsDAO {
     }
 
     @Override
-    public List<Event> getEvents(Date from, Date to) {
+    public List<Event> getEvents(DateRange dateRange) {
         List<Event> eventNames = new ArrayList<>();
         Calendar cal = Calendar.getInstance();
-        cal.setTime(to);
+        cal.setTime(dateRange.getTo());
         cal.add(Calendar.YEAR, 1);
-        for (InMemoryDataRow row : IN_MEMORY_DB.subMap(from, cal.getTime()).values())
+        for (InMemoryDataRow row : IN_MEMORY_DB.subMap(dateRange.getFrom(), cal.getTime()).values())
             eventNames.add(new Event(row.id, row.eventName));
         return eventNames;
     }
@@ -403,7 +409,7 @@ public class InMemoryDAOImpl implements GlobalEventsDAO {
         cal.set(2016, Calendar.OCTOBER, 25);
         addShooting(cal.getTime(), "Sandy 2016");
         cal.set(2017, Calendar.APRIL, 10);
-        addShooting(cal.getTime(), "San Bernardino 2011");
+        addShooting(cal.getTime(), "San Bernardino 2017");
     }
     private static void addShooting(Date date, String eventName) {
         InMemoryDataRow row = new InMemoryDataRow(DATE_FORMAT.format(date), date, eventName);

@@ -1,6 +1,7 @@
 package edu.vt.dlrl.service;
 
 import edu.vt.dlrl.dao.GlobalEventsDAO;
+import edu.vt.dlrl.domain.DateRange;
 import edu.vt.dlrl.domain.Event;
 import edu.vt.dlrl.domain.TermFrequency;
 import edu.vt.dlrl.domain.TermSelection;
@@ -27,12 +28,17 @@ public class GlobalEventsServiceImpl implements GlobalEventsService {
     }
 
     @Override
-    public TermSelection getTermSelection(Date from, Date to, int topK, Set<String> eventIds) {
-        List<TermFrequency> termFrequencies = dao.getTermFrequencies(from, to, topK);
+    public DateRange getMaxDateRange() {
+        return dao.getMaxDateRange();
+    }
+
+    @Override
+    public TermSelection getTermSelection(DateRange dateRange, int topK, Set<String> eventIds) {
+        List<TermFrequency> termFrequencies = dao.getTermFrequencies(dateRange, topK);
         NavigableSet<TermFrequency> termSet = mergeAndOrder(termFrequencies);
         List<TermFrequency> topKTerms = getTopK(termSet, topK);
-        TermSelection selection = new TermSelection(from, to, topKTerms);
-        List<Event> events = dao.getEvents(from, to);
+        TermSelection selection = new TermSelection(dateRange.getFrom(), dateRange.getTo(), topKTerms);
+        List<Event> events = dao.getEvents(dateRange);
         for (Event event : events)
             event.setSelected(eventIds.isEmpty() || eventIds.contains(event.getId()));
         selection.setEvents(events);

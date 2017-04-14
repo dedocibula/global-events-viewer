@@ -1,5 +1,6 @@
 package edu.vt.dlrl.controller;
 
+import edu.vt.dlrl.domain.DateRange;
 import edu.vt.dlrl.domain.TermSelection;
 import edu.vt.dlrl.service.GlobalEventsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Calendar;
 import java.util.Collections;
@@ -30,14 +32,12 @@ public class MainController {
     }
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
-    public String index() {
-        return "index";
+    public ModelAndView index() {
+        return new ModelAndView("index", "maxDateRange", service.getMaxDateRange());
     }
 
-    @RequestMapping(value = "/term-frequencies",
-            method = RequestMethod.POST,
-            produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<TermSelection> termFrequencies(
+    @RequestMapping(value = "/term-frequencies", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<TermSelection> termSelection(
             @RequestParam("from") int fromDate,
             @RequestParam("to") int toDate,
             @RequestParam("count") int topK,
@@ -47,6 +47,6 @@ public class MainController {
         Calendar to = Calendar.getInstance();
         to.set(toDate, Calendar.JANUARY, 1);
         eventIds = eventIds != null ? eventIds : Collections.<String>emptySet();
-        return new ResponseEntity<>(service.getTermSelection(from.getTime(), to.getTime(), topK, eventIds), HttpStatus.OK);
+        return new ResponseEntity<>(service.getTermSelection(new DateRange(from.getTime(), to.getTime()), topK, eventIds), HttpStatus.OK);
     }
 }

@@ -61,6 +61,14 @@
             </div>
         </div>
     </div>
+    <script th:inline="javascript" type="application/javascript">
+        $(document).ready(function () {
+            var maxDateRange =/*[[${maxDateRange}]]*/ {from: "2000-01-01", to: "2017-01-01"};
+            maxDateRange.from = +maxDateRange.from.split("-")[0];
+            maxDateRange.to = +maxDateRange.to.split("-")[0];
+            setupFilters(maxDateRange);
+        });
+    </script>
 </section>
 </body>
 </html>
