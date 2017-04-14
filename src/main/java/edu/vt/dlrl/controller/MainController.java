@@ -46,8 +46,8 @@ public class MainController {
         return new ModelAndView("mentions", "mentions", service.getTermMentions(term, createDateRange(fromDate, toDate), eventIds));
     }
 
-    @RequestMapping(value = "/term-frequencies", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<TermSelection> termSelection(
+    @RequestMapping(value = "/terms-selection", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<TermSelection> termsSelection(
             @RequestParam("from") int fromDate,
             @RequestParam("to") int toDate,
             @RequestParam("count") int topK,

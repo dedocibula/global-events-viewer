@@ -5,6 +5,10 @@
     padding-right: 0;
 }
 
+#term-cloud-canvas text {
+    cursor: pointer;
+}
+
 .words-hoverover {
     display: none;
     z-index: 100000;

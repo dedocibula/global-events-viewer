@@ -28,6 +28,8 @@ $(document).ready(function () {
 
         $("#search-terms").on("click", loadTermSelection);
 
+        $(document.body).on("click", "#term-cloud-canvas text", displayTermMentions);
+
         loadTermSelection();
     };
 
@@ -57,9 +59,23 @@ $(document).ready(function () {
         });
     }
 
+    function displayTermMentions() {
+        var dates = $slider.labeledslider("values");
+        var eventIds = [];
+        if (dates[0] === lastDates[0] && dates[1] === lastDates[1])
+            eventIds = $events.find(':checked').map(function() { return this.id }).toArray();
+        var data = {
+            from: dates[0],
+            to: dates[1],
+            eventIds: eventIds
+        };
+
+        window.location = "/mentions/" + this.innerHTML + "?" + $.param(data);
+    }
+
     function post(url, data, onSuccess) {
         $.ajax({
-            url: "/term-frequencies",
+            url: url,
             type: "POST",
             cache: false,
             contentType: "application/x-www-form-urlencoded; charset=UTF-8",
