@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Author: dedocibula
@@ -31,8 +32,8 @@ public class HBaseDAOImpl implements GlobalEventsDAO {
     }
 
     @Override
-    public List<TermFrequency> getTermFrequencies(DateRange dateRange, int kForEvent) {
-        return Collections.emptyList();
+    public Map<String, List<TermFrequency>> getEventTermFrequencies(DateRange dateRange, int kForEvent) {
+        return Collections.emptyMap();
     }
 
     @Override

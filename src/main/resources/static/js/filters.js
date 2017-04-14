@@ -32,10 +32,12 @@ $(document).ready(function () {
     function loadTermSelection() {
         var dates = $slider.labeledslider("values");
         var count = $counter.spinner("value");
+        var eventIds = $events.find(':checked').map(function() { return this.id }).toArray();
         var data = {
             from: dates[0],
             to: dates[1],
-            count: count
+            count: count,
+            eventIds: eventIds
         };
 
         post("/terms-selection", data, function (results) {
@@ -71,7 +73,8 @@ $(document).ready(function () {
         for (var i = events.length - 1; i >= 0; i--) {
             var event = events[i];
             $events.append('<label for="' + event.id + '">' + event.name + '</label>' +
-                '<input class="toggle brand-toggle" type="checkbox" name="' + event.id + '" id="' + event.id + '" checked="' + (event.selected ? "checked" : "unchecked") + '"/>');
+                '<input class="toggle brand-toggle" type="checkbox" name="' + event.id + '" id="' + event.id + '" ' +
+                (event.selected ? 'checked="checked"' : "") + '"/>');
         }
         $events.controlgroup({ direction: "vertical" });
     }

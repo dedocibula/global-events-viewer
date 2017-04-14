@@ -24,21 +24,23 @@ public class InMemoryDAOImpl implements GlobalEventsDAO {
     }
 
     @Override
-    public List<TermFrequency> getTermFrequencies(DateRange dateRange, int kForEvent) {
-        List<TermFrequency> termFrequencies = new ArrayList<>();
+    public Map<String, List<TermFrequency>> getEventTermFrequencies(DateRange dateRange, int kForEvent) {
+        Map<String, List<TermFrequency>> eventTermFrequencies = new HashMap<>();
         Calendar cal = Calendar.getInstance();
         cal.setTime(dateRange.getTo());
         cal.add(Calendar.YEAR, 1);
         for (InMemoryDataRow row : IN_MEMORY_DB.subMap(dateRange.getFrom(), cal.getTime()).values()) {
             int current = 0;
+            List<TermFrequency> termFrequencies = new ArrayList<>();
             for (TermFrequency term : row.terms) {
                 if (current >= kForEvent)
                     break;
                 termFrequencies.add(new TermFrequency(term));
                 current++;
             }
+            eventTermFrequencies.put(row.id, termFrequencies);
         }
-        return termFrequencies;
+        return eventTermFrequencies;
     }
 
     @Override

@@ -34,8 +34,8 @@ public class GlobalEventsServiceImpl implements GlobalEventsService {
 
     @Override
     public TermSelection getTermSelection(DateRange dateRange, int topK, Set<String> eventIds) {
-        List<TermFrequency> termFrequencies = dao.getTermFrequencies(dateRange, topK);
-        NavigableSet<TermFrequency> termSet = mergeAndOrder(termFrequencies);
+        Map<String, List<TermFrequency>> eventTermFrequencies = dao.getEventTermFrequencies(dateRange, topK);
+        NavigableSet<TermFrequency> termSet = mergeAndOrder(eventTermFrequencies, eventIds);
         List<TermFrequency> topKTerms = getTopK(termSet, topK);
         TermSelection selection = new TermSelection(dateRange.getFrom(), dateRange.getTo(), topKTerms);
         List<Event> events = dao.getEvents(dateRange);
@@ -45,17 +45,22 @@ public class GlobalEventsServiceImpl implements GlobalEventsService {
         return selection;
     }
 
-    private NavigableSet<TermFrequency> mergeAndOrder(List<TermFrequency> termFrequencies) {
+    private NavigableSet<TermFrequency> mergeAndOrder(Map<String, List<TermFrequency>> eventTermFrequencies,
+                                                      Set<String> eventIds) {
         TreeSet<TermFrequency> set = new TreeSet<>(comparator);
         Map<String, TermFrequency> visited = new HashMap<>();
-        for (TermFrequency termFrequency : termFrequencies) {
-            if (visited.containsKey(termFrequency.getTerm())) {
-                TermFrequency current = visited.remove(termFrequency.getTerm());
-                set.remove(current);
-                termFrequency.setFrequency(termFrequency.getFrequency() + current.getFrequency());
+        for (String eventId : eventTermFrequencies.keySet()) {
+            if (!eventIds.isEmpty() && !eventIds.contains(eventId))
+                continue;
+            for (TermFrequency termFrequency : eventTermFrequencies.get(eventId)) {
+                if (visited.containsKey(termFrequency.getTerm())) {
+                    TermFrequency current = visited.remove(termFrequency.getTerm());
+                    set.remove(current);
+                    termFrequency.setFrequency(termFrequency.getFrequency() + current.getFrequency());
+                }
+                set.add(termFrequency);
+                visited.put(termFrequency.getTerm(), termFrequency);
             }
-            set.add(termFrequency);
-            visited.put(termFrequency.getTerm(), termFrequency);
         }
         return set;
     }

@@ -41,7 +41,7 @@ public class MainController {
             @RequestParam("from") int fromDate,
             @RequestParam("to") int toDate,
             @RequestParam("count") int topK,
-            @RequestParam(value = "eventIds", required = false) Set<String> eventIds) {
+            @RequestParam(value = "eventIds[]", required = false) Set<String> eventIds) {
         Calendar from = Calendar.getInstance();
         from.set(fromDate, Calendar.JANUARY, 1);
         Calendar to = Calendar.getInstance();

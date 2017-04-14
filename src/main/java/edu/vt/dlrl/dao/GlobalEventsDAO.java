@@ -5,6 +5,7 @@ import edu.vt.dlrl.domain.Event;
 import edu.vt.dlrl.domain.TermFrequency;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Author: dedocibula
@@ -13,7 +14,7 @@ import java.util.List;
 public interface GlobalEventsDAO {
     DateRange getMaxDateRange();
 
-    List<TermFrequency> getTermFrequencies(DateRange dateRange, int kForEvent);
+    Map<String, List<TermFrequency>> getEventTermFrequencies(DateRange dateRange, int kForEvent);
 
     List<Event> getEvents(DateRange dateRange);
 }
