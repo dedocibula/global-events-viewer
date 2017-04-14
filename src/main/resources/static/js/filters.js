@@ -3,6 +3,8 @@ $(document).ready(function () {
     var $counter = $("#counter");
     var $events = $("#events");
     var $termCloudTitle = $("#term-cloud").find("h2:first");
+    var lastDates = [-1, -1];
+    var loadingTermSelection = false;
 
     window.setupFilters = function (dateRange) {
         $slider.labeledslider({
@@ -30,9 +32,14 @@ $(document).ready(function () {
     };
 
     function loadTermSelection() {
+        if (loadingTermSelection)
+            return;
+        loadingTermSelection = true;
         var dates = $slider.labeledslider("values");
         var count = $counter.spinner("value");
-        var eventIds = $events.find(':checked').map(function() { return this.id }).toArray();
+        var eventIds = [];
+        if (dates[0] === lastDates[0] && dates[1] === lastDates[1])
+            eventIds = $events.find(':checked').map(function() { return this.id }).toArray();
         var data = {
             from: dates[0],
             to: dates[1],
@@ -45,6 +52,8 @@ $(document).ready(function () {
             $termCloudTitle.text("Most Popular Terms (" + text + ")");
             generateEventSection(results.events);
             redrawTermCloud(results.termFrequencies);
+            lastDates = dates;
+            loadingTermSelection = false;
         });
     }
 
