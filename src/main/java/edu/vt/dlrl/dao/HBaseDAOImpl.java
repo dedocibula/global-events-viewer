@@ -1,8 +1,6 @@
 package edu.vt.dlrl.dao;
 
-import edu.vt.dlrl.domain.DateRange;
-import edu.vt.dlrl.domain.Event;
-import edu.vt.dlrl.domain.TermFrequency;
+import edu.vt.dlrl.domain.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.hadoop.hbase.HbaseTemplate;
 import org.springframework.stereotype.Repository;
@@ -38,5 +36,10 @@ public class HBaseDAOImpl implements GlobalEventsDAO {
     @Override
     public LinkedHashMap<Event, List<String>> getEventTermToURLs(String term, DateRange dateRange) {
         return new LinkedHashMap<>();
+    }
+
+    @Override
+    public List<Trend> getTrends(DateRange dateRange) {
+        return Collections.emptyList();
     }
 }

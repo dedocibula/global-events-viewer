@@ -3,6 +3,7 @@ package edu.vt.dlrl.service;
 import edu.vt.dlrl.domain.DateRange;
 import edu.vt.dlrl.domain.TermMentions;
 import edu.vt.dlrl.domain.TermSelection;
+import edu.vt.dlrl.domain.TrendSelection;
 
 import java.util.Date;
 import java.util.Set;
@@ -17,4 +18,6 @@ public interface GlobalEventsService {
     TermSelection getTermSelection(DateRange dateRange, int topK, Set<String> eventIds);
 
     TermMentions getTermMentions(String term, DateRange dateRange, Set<String> eventIds);
+
+    TrendSelection getTrendSelection(DateRange dateRange);
 }

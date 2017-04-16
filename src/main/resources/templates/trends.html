@@ -2,23 +2,14 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorator="layout">
 <head>
-    <title>Term Cloud</title>
+    <title>Global Trends</title>
 
-    <!-- Slider CSS -->
-    <link href="/css/filters.css" rel="stylesheet"/>
+    <!-- Trends CSS -->
+    <link href="/css/trends.css" rel="stylesheet"/>
 
-    <!-- Term cloud CSS -->
-    <link href="/css/term.cloud.css" rel="stylesheet"/>
-
-    <!-- D3 word cloud -->
-    <script src="/js/d3.layout.cloud.js"></script>
-
-    <!-- Term cloud js -->
-    <script src="/js/term.cloud.js"></script>
-
-    <!-- Slider js -->
+    <!-- Trends js -->
     <script src="/js/labeled.slider.js"></script>
-    <script src="/js/filters.js"></script>
+    <script src="/js/trends.js"></script>
 </head>
 <body>
 <!-- Page Content -->
@@ -30,25 +21,14 @@
                 <hr/>
                 <div id="slider"></div>
                 <button id="search-terms" class="ui-button ui-corner-all ui-widget">
-                    <span class="glyphicon glyphicon-search"></span> Search Terms
+                    Update Trends
                 </button>
             </div>
-            <div id="term-cloud" class="col-md-8">
-                <h2>Most Popular Terms</h2>
-                <div id="term-cloud-canvas"></div>
+            <div id="charts" class="col-md-9" style="height: inherit">
+                <div id="chart-age-canvas"></div>
+                <div id="chart-victims-canvas"></div>
             </div>
-            <div id="filters" class="col-md-2">
-                <div>
-                    <label for="counter" title="Select term count">Term Count</label>
-                    <hr/>
-                    <input id="counter" name="count" value="50"/>
-                </div>
-                <div style="margin-top: 20px">
-                    <label for="events" title="Select specific events">Events</label>
-                    <hr/>
-                    <div id="events"></div>
-                </div>
-            </div>
+            <div class="col-md-offset-1"></div>
         </div>
     </div>
     <script th:inline="javascript" type="application/javascript">

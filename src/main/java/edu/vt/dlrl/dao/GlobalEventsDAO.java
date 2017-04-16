@@ -1,8 +1,6 @@
 package edu.vt.dlrl.dao;
 
-import edu.vt.dlrl.domain.DateRange;
-import edu.vt.dlrl.domain.Event;
-import edu.vt.dlrl.domain.TermFrequency;
+import edu.vt.dlrl.domain.*;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -17,4 +15,6 @@ public interface GlobalEventsDAO {
     LinkedHashMap<Event, List<TermFrequency>> getEventTermFrequencies(DateRange dateRange, int kForEvent);
 
     LinkedHashMap<Event, List<String>> getEventTermToURLs(String term, DateRange dateRange);
+
+    List<Trend> getTrends(DateRange dateRange);
 }

@@ -1,8 +1,6 @@
 package edu.vt.dlrl.dao;
 
-import edu.vt.dlrl.domain.DateRange;
-import edu.vt.dlrl.domain.Event;
-import edu.vt.dlrl.domain.TermFrequency;
+import edu.vt.dlrl.domain.*;
 import org.springframework.stereotype.Repository;
 
 import java.text.SimpleDateFormat;
@@ -48,6 +46,14 @@ public class InMemoryDAOImpl implements GlobalEventsDAO {
                 eventTermToURLs.put(new Event(row.id, row.eventName), new ArrayList<>(row.mentions.get(term)));
         }
         return eventTermToURLs;
+    }
+
+    @Override
+    public List<Trend> getTrends(DateRange dateRange) {
+        List<Trend> trends = new ArrayList<>();
+        for (InMemoryDataRow row : findMatchingRows(dateRange))
+            trends.add(new Trend(row.date, row.age, row.victims));
+        return trends;
     }
 
     private Collection<InMemoryDataRow> findMatchingRows(DateRange dateRange) {
@@ -418,7 +424,7 @@ public class InMemoryDAOImpl implements GlobalEventsDAO {
     }
 
     private static void addShooting(Date date, String eventName) {
-        InMemoryDataRow row = new InMemoryDataRow(DATE_FORMAT.format(date), date, eventName);
+        InMemoryDataRow row = new InMemoryDataRow(DATE_FORMAT.format(date), date, eventName, 18 + (int) (Math.random() * 10), 10 + (int) (Math.random() * 30));
         String[] words = SAMPLE_SEED.replaceAll("[^A-Za-z0-9 ]", "").split(" ");
         for (int i = 0; i < 100; i++)
             row.terms.add(new TermFrequency(words[(int) (Math.random() * words.length)], 10 + (int) (Math.random() * 30)));
@@ -435,13 +441,17 @@ public class InMemoryDAOImpl implements GlobalEventsDAO {
         private String id;
         private Date date;
         private String eventName;
+        private int age;
+        private int victims;
         private SortedSet<TermFrequency> terms;
         private Map<String, List<String>> mentions;
 
-        private InMemoryDataRow(String id, Date date, String eventName) {
+        private InMemoryDataRow(String id, Date date, String eventName, int age, int victims) {
             this.id = id;
             this.date = date;
             this.eventName = eventName;
+            this.age = age;
+            this.victims = victims;
             terms = new TreeSet<>(new Comparator<TermFrequency>() {
                 @Override
                 public int compare(TermFrequency o1, TermFrequency o2) {

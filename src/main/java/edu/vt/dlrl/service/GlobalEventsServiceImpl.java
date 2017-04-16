@@ -55,6 +55,13 @@ public class GlobalEventsServiceImpl implements GlobalEventsService {
         return mentions;
     }
 
+    @Override
+    public TrendSelection getTrendSelection(DateRange dateRange) {
+        TrendSelection selection = new TrendSelection(dateRange.getFrom(), dateRange.getTo());
+        selection.setTrends(dao.getTrends(dateRange));
+        return selection;
+    }
+
     private NavigableSet<TermFrequency> mergeAndOrder(Map<Event, List<TermFrequency>> eventTermFrequencies,
                                                       Set<String> eventIds) {
         TreeSet<TermFrequency> set = new TreeSet<>(comparator);

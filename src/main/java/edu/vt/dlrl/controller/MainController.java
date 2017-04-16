@@ -2,6 +2,7 @@ package edu.vt.dlrl.controller;
 
 import edu.vt.dlrl.domain.DateRange;
 import edu.vt.dlrl.domain.TermSelection;
+import edu.vt.dlrl.domain.TrendSelection;
 import edu.vt.dlrl.service.GlobalEventsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -46,6 +47,11 @@ public class MainController {
         return new ModelAndView("mentions", "mentions", service.getTermMentions(term, createDateRange(fromDate, toDate), eventIds));
     }
 
+    @RequestMapping(value = "/trends", method = RequestMethod.GET)
+    public ModelAndView trends() {
+        return new ModelAndView("trends", "maxDateRange", service.getMaxDateRange());
+    }
+
     @RequestMapping(value = "/terms-selection", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TermSelection> termsSelection(
             @RequestParam("from") int fromDate,
@@ -54,6 +60,13 @@ public class MainController {
             @RequestParam(value = "eventIds[]", required = false) Set<String> eventIds) {
         eventIds = eventIds != null ? eventIds : Collections.<String>emptySet();
         return new ResponseEntity<>(service.getTermSelection(createDateRange(fromDate, toDate), topK, eventIds), HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/trend-selection", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<TrendSelection> trendSelection(
+            @RequestParam("from") int fromDate,
+            @RequestParam("to") int toDate) {
+        return new ResponseEntity<>(service.getTrendSelection(createDateRange(fromDate, toDate)), HttpStatus.OK);
     }
 
     private DateRange createDateRange(int fromDate, int toDate) {
