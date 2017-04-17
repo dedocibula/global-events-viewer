@@ -9,13 +9,15 @@ import java.util.Date;
  * Created on: 15.4.2017.
  */
 public class Trend {
-    @JsonFormat(pattern = "yyyy")
+    @JsonFormat(pattern = "dd-MMM-yy")
     private Date date;
+    private String event;
     private int assailantAge;
     private int victimCount;
 
-    public Trend(Date date, int assailantAge, int victimCount) {
+    public Trend(Date date, String event, int assailantAge, int victimCount) {
         this.date = date;
+        this.event = event;
         this.assailantAge = assailantAge;
         this.victimCount = victimCount;
     }
@@ -26,6 +28,14 @@ public class Trend {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public String getEvent() {
+        return event;
+    }
+
+    public void setEvent(String event) {
+        this.event = event;
     }
 
     public int getAssailantAge() {

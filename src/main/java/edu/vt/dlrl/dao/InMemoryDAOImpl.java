@@ -52,7 +52,7 @@ public class InMemoryDAOImpl implements GlobalEventsDAO {
     public List<Trend> getTrends(DateRange dateRange) {
         List<Trend> trends = new ArrayList<>();
         for (InMemoryDataRow row : findMatchingRows(dateRange))
-            trends.add(new Trend(row.date, row.age, row.victims));
+            trends.add(new Trend(row.date, row.eventName, row.age, row.victims));
         return trends;
     }
 
