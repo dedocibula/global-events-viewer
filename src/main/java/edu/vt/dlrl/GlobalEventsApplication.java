@@ -5,6 +5,7 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.Scope;
 
 /**
@@ -12,11 +13,12 @@ import org.springframework.context.annotation.Scope;
  * Created on: 26.3.2017.
  */
 @SpringBootApplication
+@PropertySource("classpath:hbase.properties")
 public class GlobalEventsApplication {
 
-    @Value("hbase.zk.host")
+    @Value("${hbase.zk.host}")
     private String hbaseZkQuorum;
-    @Value("hbase.zk.port")
+    @Value("${hbase.zk.port}")
     private String hbaseZkPort;
 
     @Bean
