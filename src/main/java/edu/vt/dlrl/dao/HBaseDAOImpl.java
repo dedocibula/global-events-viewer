@@ -63,7 +63,7 @@ public class HBaseDAOImpl implements GlobalEventsDAO {
             @Override
             public DateRange extractData(ResultScanner results) throws Exception {
                 byte[] firstDate = results.next().value();
-                byte[] lastDate = null;
+                byte[] lastDate = firstDate;
                 for (Result result : results)
                     lastDate = result.value();
                 return new DateRange(format.parse(Bytes.toString(firstDate)), format.parse(Bytes.toString(lastDate)));
@@ -134,8 +134,11 @@ public class HBaseDAOImpl implements GlobalEventsDAO {
 
     private Scan rangedScan(DateRange dateRange, String... columnNames) {
         SimpleDateFormat format = new SimpleDateFormat(eventRowKeyPrefix);
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(dateRange.getTo());
+        cal.add(Calendar.YEAR, 1);
         Scan scan = new Scan(Bytes.toBytes(format.format(dateRange.getFrom())),
-                Bytes.toBytes(format.format(dateRange.getTo())));
+                Bytes.toBytes(format.format(cal.getTime())));
         for (String columnName : columnNames)
             scan.addColumn(Bytes.toBytes(columnFamily), Bytes.toBytes(columnName));
         return scan;
