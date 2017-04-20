@@ -3,7 +3,6 @@ package edu.vt.dlrl.service;
 import edu.vt.dlrl.dao.GlobalEventsDAO;
 import edu.vt.dlrl.domain.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -19,7 +18,7 @@ public class GlobalEventsServiceImpl implements GlobalEventsService {
     private final Comparator<TermFrequency> comparator;
 
     @Autowired
-    public GlobalEventsServiceImpl(@Qualifier("in-memory-dao") GlobalEventsDAO dao) {
+    public GlobalEventsServiceImpl(GlobalEventsDAO dao) {
         this.dao = dao;
         this.comparator = new TermComparator();
     }
@@ -45,9 +44,9 @@ public class GlobalEventsServiceImpl implements GlobalEventsService {
     @Override
     public TermMentions getTermMentions(String term, DateRange dateRange, Set<String> eventIds) {
         Map<Event, List<String>> eventTermToURLs = dao.getEventTermToURLs(term, dateRange);
-        for (Iterator<Event> it = eventTermToURLs.keySet().iterator(); it.hasNext();) {
-            Event event = it.next();
-            if (!eventIds.isEmpty() && !eventIds.contains(event.getId()))
+        for (Iterator<Map.Entry<Event, List<String>>> it = eventTermToURLs.entrySet().iterator(); it.hasNext(); ) {
+            Map.Entry<Event, List<String>> event = it.next();
+            if (!eventIds.isEmpty() && !eventIds.contains(event.getKey().getId()))
                 it.remove();
         }
         TermMentions mentions = new TermMentions(term, dateRange.getFrom(), dateRange.getTo());

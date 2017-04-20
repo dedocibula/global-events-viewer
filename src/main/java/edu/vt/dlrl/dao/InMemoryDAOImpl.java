@@ -1,7 +1,9 @@
 package edu.vt.dlrl.dao;
 
-import edu.vt.dlrl.domain.*;
-import org.springframework.stereotype.Repository;
+import edu.vt.dlrl.domain.DateRange;
+import edu.vt.dlrl.domain.Event;
+import edu.vt.dlrl.domain.TermFrequency;
+import edu.vt.dlrl.domain.Trend;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -10,7 +12,6 @@ import java.util.*;
  * Author: dedocibula
  * Created on: 27.3.2017.
  */
-@Repository("in-memory-dao")
 public class InMemoryDAOImpl implements GlobalEventsDAO {
 
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyMMdd");
